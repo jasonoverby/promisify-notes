@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`promisifyContrivedExample async/await pattern gets an error after 0 seconds when one of the args is not a number using the promisified function 1`] = `
+"[31mTypeError: \\"One or both of these arguments is not a number: a, 3[39m
+[31m    at Timeout.TypeError [as _onTimeout] (/Users/j0o00um/p/practice/promisify/contrivedExample.js:25:16)[39m"
+`;
+
+exports[`promisifyContrivedExample callback patter gets an error after 0 seconds when one of the args is not a number using a callback 1`] = `[TypeError: "One or both of these arguments is not a number: a, 3]`;
