@@ -1,7 +1,7 @@
 const {
-  getMsgAfterRandomSecs,
   getMsgAfterRandomSecsAsync,
-} = require('../contrivedExample');
+  getMsgAfterRandomSecsWithCallback,
+} = require('../lib/contrived-example');
 
 describe('promisifyContrivedExample', () => {
   beforeEach(() => {
@@ -9,7 +9,7 @@ describe('promisifyContrivedExample', () => {
     jest.spyOn(global, 'setTimeout');
   });
 
-  describe('callback patter', () => {
+  describe('callback pattern', () => {
     it('gets a message after a random number of seconds inside a callback', (done) => {
       const num1 = 1;
       const num2 = 3;
@@ -18,7 +18,7 @@ describe('promisifyContrivedExample', () => {
         done();
       };
 
-      getMsgAfterRandomSecs(num1, num2, theCallback);
+      getMsgAfterRandomSecsWithCallback(num1, num2, theCallback);
       expect(setTimeout).toHaveBeenCalledTimes(1);
       expect.assertions(2);
     });
@@ -32,7 +32,7 @@ describe('promisifyContrivedExample', () => {
         done();
       };
 
-      getMsgAfterRandomSecs(num1, num2, theCallback);
+      getMsgAfterRandomSecsWithCallback(num1, num2, theCallback);
       expect(setTimeout).toHaveBeenCalledTimes(1);
       expect(setTimeout).toHaveBeenCalledWith(
         expect.any(Function),
