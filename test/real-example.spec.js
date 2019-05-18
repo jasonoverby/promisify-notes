@@ -1,16 +1,21 @@
 const { get } = require('https');
 const { getHttps } = require('../lib/get-https');
 const {
-  getTodo,
   getTodos,
 } = require('../lib/real-example');
 
 describe('real example', () => {
-  describe('https.get with callback', () => {
-    it('succeeds when url is valid', (done) => {
+  const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
+  const todoId = 2;
+  const snapshotMatcher = {
+    userId: expect.any(Number),
+    id: expect.any(Number),
+    title: expect.any(String),
+    completed: expect.any(Boolean),
+  };
 
-      const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
-      const todoId = 2;
+  describe('getting a todo with a callback', () => {
+    it('succeeds when url is valid', (done) => {
       const callback = (response) => {
         let str = '';
         response.setEncoding('utf8');
@@ -19,32 +24,34 @@ describe('real example', () => {
         });
         response.on('end', () => {
           const dataObj = JSON.parse(str);
-          expect(dataObj).toMatchSnapshot({
-            userId: expect.any(Number),
-            id: expect.any(Number),
-            title: expect.any(String),
-            completed: expect.any(Boolean),
-          });
+          expect(dataObj).toMatchSnapshot(snapshotMatcher);
           done();
         });
-
       };
 
       get(`${todosUrl}/${todoId}`, callback);
       expect.assertions(1);
     });
 
-    // it('fails when something is not "something"', (done) => {
-    //   const something = '';
-    //   const theCallback = (result, err) => {
-    //     expect(result).toBe(null);
-    //     expect(err).toBeInstanceOf(TypeError);
-    //     done();
-    //   };
+    it('fails when url is invalid', () => {
+      const badTodosUrl = 'htps://jsonplaceholder.typicode.com/todos';
+      const callback = () => {};
 
-    //   myFuncWithCallback(something, theCallback);
-    //   expect.assertions(2);
-    // });
+      expect(() => {
+        get(`${badTodosUrl}/${todoId}`, callback);
+      }).toThrowErrorMatchingSnapshot();
+      expect.assertions(1);
+    });
   });
 
+  describe('getting a todo with getHttps', () => {
+    it('succeeds when the todo is found', async () => {
+      const getTodo = getHttps.bind(null, `${todosUrl}/${todoId}`);
+      const todo = await getTodo(todoId);
+      expect(todo).toMatchSnapshot(snapshotMatcher);
+    });
+    // it('succeeds when the todo is found', async () => {
+    //   const todo = await getTodo(todoId);
+    // });
+  });
 });
