@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`real example getting a todo with a callback fails when url is invalid 1`] = `"Protocol \\"htps:\\" not supported. Expected \\"https:\\""`;
+exports[`https.get getting a todo with a callback fails when url is invalid 1`] = `"Protocol \\"htps:\\" not supported. Expected \\"https:\\""`;
 
-exports[`real example getting a todo with a callback succeeds when url is valid 1`] = `
+exports[`https.get getting a todo with a callback succeeds when url is valid 1`] = `
 Object {
   "completed": Any<Boolean>,
   "id": Any<Number>,
@@ -11,7 +11,18 @@ Object {
 }
 `;
 
-exports[`real example getting a todo with getHttps succeeds when the todo is found 1`] = `
+exports[`https.get httpsGet fails when url is valid 1`] = `"Protocol \\"htps:\\" not supported. Expected \\"https:\\""`;
+
+exports[`https.get httpsGet getting a todo with getHttps succeeds when the todo is found 1`] = `
+Object {
+  "completed": Any<Boolean>,
+  "id": Any<Number>,
+  "title": Any<String>,
+  "userId": Any<Number>,
+}
+`;
+
+exports[`https.get httpsGet succeeds when url is valid 1`] = `
 Object {
   "completed": Any<Boolean>,
   "id": Any<Number>,

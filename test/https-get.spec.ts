@@ -1,12 +1,10 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { get } from 'https';
 import { getHttps, HttpsGetCb } from '../lib/get-https';
-// const {
-//   getTodos,
-// } = require('../lib/real-example');
 
-describe('real example', () => {
+describe('https.get', () => {
   const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
+  const badTodosUrl = 'htps://jsonplaceholder.typicode.com/todos';
   const todoId = 2;
   const snapshotMatcher = {
     completed: expect.any(Boolean),
@@ -34,7 +32,6 @@ describe('real example', () => {
     });
 
     it('fails when url is invalid', () => {
-      const badTodosUrl = 'htps://jsonplaceholder.typicode.com/todos';
       const callback = () => null;
 
       expect(() => {
@@ -44,14 +41,33 @@ describe('real example', () => {
     });
   });
 
-  describe('getting a todo with getHttps', () => {
-    it('succeeds when the todo is found', async () => {
-      const getTodo = getHttps.bind(null, `${todosUrl}/${todoId}`);
-      const todo = await getTodo(todoId);
+  describe('httpsGet', () => {
+    it('succeeds when url is valid', async () => {
+      const todo = await getHttps(`${todosUrl}/${todoId}`);
       expect(todo).toMatchSnapshot(snapshotMatcher);
+      expect.assertions(1);
     });
-    // it('succeeds when the todo is found', async () => {
-    //   const todo = await getTodo(todoId);
-    // });
+
+    it('fails when url is valid', async () => {
+      await expect(getHttps(`${badTodosUrl}/${todoId}`)).rejects.toThrowErrorMatchingSnapshot();
+      expect.assertions(1);
+    });
+
+    describe('getting a todo with getHttps', () => {
+      const getTodo = (id: number) => getHttps(`${todosUrl}/${id}`);
+
+      it('succeeds when the todo is found', async () => {
+        const todo = await getTodo(todoId);
+        expect(todo).toMatchSnapshot(snapshotMatcher);
+        expect.assertions(1);
+      });
+
+      it('receives empty object when the todo is not found', async () => {
+        const nonexistentTodo = await getTodo(1000);
+        expect(JSON.stringify(nonexistentTodo)).toMatch('{}');
+        expect(nonexistentTodo).not.toHaveProperty('id');
+        expect.assertions(2);
+      });
+    });
   });
 });
