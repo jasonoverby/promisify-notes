@@ -1,8 +1,7 @@
 import { promisify } from 'util';
 
-import { ErrorLastCallback } from '../types';
-
 const getSomethingErr = (something: string) => new TypeError(`"${something}" is not something`);
+export type ErrorLastCallback = (str?: string, err?: Error) => void;
 
 const myFuncWithCallback = (something: string, callback?: ErrorLastCallback): void => {
   if (something !== 'something') {
