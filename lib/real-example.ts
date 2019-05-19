@@ -1,6 +1,6 @@
-const { get } = require('https');
+import { get } from 'https';
 // const { promisify } = require('util');
-const { getHttps } = require('./get-https');
+import { getHttps } from './get-https';
 
 // const {
 //   getImprovedErrorMsg,
@@ -25,18 +25,20 @@ const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
 // }
 
 const getTodos = getHttps.bind(null, todosUrl);
-const getTodo = id => (
+const getTodo = (id: number) => (
   getHttps(`${todosUrl}/${id}`)
 );
-// try {
-//   const todos = await getTodos();
-//   const todo = await getTodo(1);
-//   console.log(JSON.stringify(todos[0]) === JSON.stringify(todo));
-//   console.log(todo);
-//   await getHttps('f');
-// } catch (err) {
-//   console.log(getImprovedErrorMsg(err));
-// }
+(async () => {
+  try {
+    const todos = await getTodos();
+    const todo = await getTodo(1);
+    console.log(JSON.stringify(todos[0]) === JSON.stringify(todo));
+    console.log(todo);
+    // await getHttps('f');
+  } catch (err) {
+    console.log(err);
+  }
+})();
 
 module.exports = {
   getTodo,

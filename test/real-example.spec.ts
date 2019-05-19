@@ -1,25 +1,25 @@
-const { get } = require('https');
-const { getHttps } = require('../lib/get-https');
-const {
-  getTodos,
-} = require('../lib/real-example');
+import { IncomingMessage } from 'http';
+import { get } from 'https';
+import { getHttps } from '../lib/get-https';
+// const {
+//   getTodos,
+// } = require('../lib/real-example');
 
 describe('real example', () => {
   const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
   const todoId = 2;
   const snapshotMatcher = {
-    userId: expect.any(Number),
+    completed: expect.any(Boolean),
     id: expect.any(Number),
     title: expect.any(String),
-    completed: expect.any(Boolean),
+    userId: expect.any(Number),
   };
 
   describe('getting a todo with a callback', () => {
     it('succeeds when url is valid', (done) => {
-      const callback = (response) => {
+      const callback = (response: IncomingMessage) => {
         let str = '';
-        response.setEncoding('utf8');
-        response.on('data', (data) => {
+        response.on('data', (data: object) => {
           str += data;
         });
         response.on('end', () => {
@@ -29,13 +29,13 @@ describe('real example', () => {
         });
       };
 
-      get(`${todosUrl}/${todoId}`, callback);
+      get(`${todosUrl}/${todoId}`, {}, callback);
       expect.assertions(1);
     });
 
     it('fails when url is invalid', () => {
       const badTodosUrl = 'htps://jsonplaceholder.typicode.com/todos';
-      const callback = () => {};
+      const callback = () => null;
 
       expect(() => {
         get(`${badTodosUrl}/${todoId}`, callback);

@@ -1,7 +1,8 @@
-const { promisify } = require('util');
-const https = require('https');
+import * as https from 'https';
+import { promisify } from 'util';
 
-https.get[promisify.custom] = url => (
+type GetHttpsType = (url: string, options?: https.RequestOptions, cb?: (res: object) => void) => Promise<{}>;
+https.get[promisify.custom] = (url: string): Promise<object> => (
   new Promise((resolve, reject) => {
     https.get(url, (response) => {
       let str = '';
@@ -16,8 +17,4 @@ https.get[promisify.custom] = url => (
   })
 );
 
-const getHttps = promisify(https.get);
-
-module.exports = {
-  getHttps,
-};
+export const getHttps: GetHttpsType = promisify(https.get);

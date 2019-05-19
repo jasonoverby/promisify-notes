@@ -1,14 +1,14 @@
-const {
+import {
   myFuncAsync,
   myFuncAsyncThatWillNotRun,
   myFuncWithCallback,
-} = require('../lib/promisify-custom');
+} from '../lib/promisify-custom';
 
 describe('promisify-custom', () => {
   describe('error-last callback pattern', () => {
     it('succeeds when something is "something"', (done) => {
       const something = 'something';
-      const theCallback = (result) => {
+      const theCallback = (result: string) => {
         expect(result).toBe('something');
         done();
       };
@@ -19,7 +19,7 @@ describe('promisify-custom', () => {
 
     it('fails when something is not "something"', (done) => {
       const something = '';
-      const theCallback = (result, err) => {
+      const theCallback = (result: string, err: Error) => {
         expect(result).toBe(null);
         expect(err).toBeInstanceOf(TypeError);
         done();
