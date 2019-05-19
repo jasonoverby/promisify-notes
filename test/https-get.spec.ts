@@ -1,6 +1,6 @@
-import { IncomingMessage } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 import { get } from 'https';
-import { getHttps } from '../lib/get-https';
+import { getHttps, HttpsGetCb } from '../lib/get-https';
 // const {
 //   getTodos,
 // } = require('../lib/real-example');
@@ -17,9 +17,9 @@ describe('real example', () => {
 
   describe('getting a todo with a callback', () => {
     it('succeeds when url is valid', (done) => {
-      const callback = (response: IncomingMessage) => {
+      const callback: HttpsGetCb = (response: IncomingMessage) => {
         let str = '';
-        response.on('data', (data: object) => {
+        response.on('data', (data: ServerResponse) => {
           str += data;
         });
         response.on('end', () => {

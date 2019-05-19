@@ -1,9 +1,9 @@
 import { promisify } from 'util';
 
 const getSomethingErr = (something: string) => new TypeError(`"${something}" is not something`);
-export type ErrorLastCallback = (str?: string, err?: Error) => void;
+export type ErrorLastStringCallback = (str?: string, err?: Error) => void;
 
-const myFuncWithCallback = (something: string, callback?: ErrorLastCallback): void => {
+const myFuncWithCallback = (something: string, callback: ErrorLastStringCallback): void => {
   if (something !== 'something') {
     callback(null, getSomethingErr(something));
   } else {
@@ -11,15 +11,15 @@ const myFuncWithCallback = (something: string, callback?: ErrorLastCallback): vo
   }
 };
 
-type AsyncFuncType = (url: string, cb?: (res: string) => void) => Promise<string>;
+type AsyncFuncType = (url: string, cb?: (resolve: string) => void) => Promise<string>;
 const myFuncAsyncThatWillNotRun: AsyncFuncType = promisify(myFuncWithCallback);
 
 myFuncWithCallback[promisify.custom] = (something: string): Promise<string> => (
-  new Promise((res, rej) => {
+  new Promise((resolve, reject) => {
     if (something !== 'something') {
-      rej(getSomethingErr(something));
+      reject(getSomethingErr(something));
     } else {
-      res(`${something} async`);
+      resolve(`${something} async`);
     }
   })
 );

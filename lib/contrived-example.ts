@@ -16,9 +16,9 @@ const getRandomIntBetweenMinAndMax = (num1: number, num2: number): number => {
   return Math.floor((Math.random() * (max - min)) + min);
 };
 
-type ErrorFirstCallback = (err?: Error, str?: string) => void;
+type StringCallback = (err?: Error, str?: string) => void;
 
-const getMsgAfterRandomSecsWithCallback = (num1: number, num2: number, callback: ErrorFirstCallback): void => {
+const getMsgAfterRandomSecsWithCallback = (num1: number, num2: number, callback: StringCallback): void => {
   // will be NaN if either num1 or num2 is not a number
   const randomInt = getRandomIntBetweenMinAndMax(num1, num2);
   const randomWaitFrom1ToNumSecs = notANumber(randomInt) ? 0 : randomInt * 1000;
@@ -41,4 +41,5 @@ const getMsgAfterRandomSecsAsync = async (num1: number, num2: number) => {
 export {
   getMsgAfterRandomSecsAsync,
   getMsgAfterRandomSecsWithCallback,
+  StringCallback,
 };

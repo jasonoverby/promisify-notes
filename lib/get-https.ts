@@ -1,13 +1,17 @@
-import * as https from 'https';
+import { IncomingMessage, ServerResponse } from 'http';
+import {
+  get,
+  RequestOptions,
+} from 'https';
 import { promisify } from 'util';
 
-type GetHttpsType = (url: string, options?: https.RequestOptions, cb?: (res: object) => void) => Promise<{}>;
-https.get[promisify.custom] = (url: string): Promise<object> => (
+type HttpsGetCb = (response: IncomingMessage) => void;
+type GetHttpsType = (url: string, options?: RequestOptions, cb?: HttpsGetCb) => Promise<{}>;
+get[promisify.custom] = (url: string): Promise<{}> => (
   new Promise((resolve, reject) => {
-    https.get(url, (response) => {
+    get(url, (response: IncomingMessage) => {
       let str = '';
-      response.setEncoding('utf8');
-      response.on('data', (data) => {
+      response.on('data', (data: ServerResponse) => {
         str += data;
       });
       response.on('end', () => {
@@ -17,4 +21,9 @@ https.get[promisify.custom] = (url: string): Promise<object> => (
   })
 );
 
-export const getHttps: GetHttpsType = promisify(https.get);
+const getHttps: GetHttpsType = promisify(get);
+
+export {
+  getHttps,
+  HttpsGetCb,
+};

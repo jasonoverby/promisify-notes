@@ -1,6 +1,7 @@
 import {
   getMsgAfterRandomSecsAsync,
   getMsgAfterRandomSecsWithCallback,
+  StringCallback,
 } from '../lib/contrived-example';
 
 describe('promisifyContrivedExample', () => {
@@ -13,7 +14,7 @@ describe('promisifyContrivedExample', () => {
     it('gets a message after a random number of seconds inside a callback', (done) => {
       const num1 = 1;
       const num2 = 3;
-      const theCallback = (_: Error, msg: string) => {
+      const theCallback: StringCallback = (_: Error, msg: string) => {
         expect(msg).toMatch(/waited for \d seconds/);
         done();
       };
@@ -26,7 +27,7 @@ describe('promisifyContrivedExample', () => {
     it('gets an error after 0 seconds when one of the args is not a number using a callback', (done) => {
       const num1 = 'a';
       const num2 = 3;
-      const theCallback = (err: Error) => {
+      const theCallback: StringCallback = (err: Error) => {
         expect(err).toBeInstanceOf(TypeError);
         expect(err).toMatchSnapshot();
         done();
