@@ -1,6 +1,7 @@
 # TODO
 
 * build presentation
+  
   * callback hell
   * promises simplify
   * what about existing functions that take callbacks?
