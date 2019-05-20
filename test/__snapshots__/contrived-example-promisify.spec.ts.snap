@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`promisifyContrivedExample callback pattern gets an error after 0 seconds when one of the args is not a number using a callback 1`] = `[TypeError: "One or both of these arguments is not a number: a, 3]`;

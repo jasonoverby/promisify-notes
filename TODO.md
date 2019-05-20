@@ -1,2 +1,3 @@
-* add setTimeout or other existing custom promisified function
-* add callbackify
+* build presentation
+* share presentation with Jocie and Tak
+* add README

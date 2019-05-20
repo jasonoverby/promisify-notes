@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 import { promisify } from 'util';
 import {
-  getImprovedErrorMsg,
   getNotANumberMsg,
   getRandomIntBetweenMinAndMax,
   getWaitedSecsMsg,
@@ -27,7 +26,6 @@ const getMsgAfterRandomSecsWithCallback = (num1: number, num2: number, callback:
 const getMsgAfterRandomSecsAsync = async (num1: number, num2: number) => {
   const funcWithoutCallback = promisify(getMsgAfterRandomSecsWithCallback);
   return funcWithoutCallback(num1, num2)
-    .catch((err) => getImprovedErrorMsg(err));
 };
 
 export {

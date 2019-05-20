@@ -2,9 +2,13 @@ import {
   getMsgAfterRandomSecsAsync,
   getMsgAfterRandomSecsWithCallback,
   StringCallback,
-} from '../lib/contrived-example';
+} from '../lib/contrived-example-promisify';
 
 describe('promisifyContrivedExample', () => {
+  const num1 = 1;
+  const num2 = 3;
+  const badInput = 'a';
+
   beforeEach(() => {
     jest.restoreAllMocks();
     jest.spyOn(global, 'setTimeout');
@@ -12,8 +16,6 @@ describe('promisifyContrivedExample', () => {
 
   describe('callback pattern', () => {
     it('gets a message after a random number of seconds inside a callback', (done) => {
-      const num1 = 1;
-      const num2 = 3;
       const theCallback: StringCallback = (_: Error, msg: string) => {
         expect(msg).toMatch(/waited for \d seconds/);
         done();
@@ -25,8 +27,6 @@ describe('promisifyContrivedExample', () => {
     });
 
     it('gets an error after 0 seconds when one of the args is not a number using a callback', (done) => {
-      const num1 = 'a';
-      const num2 = 3;
       const theCallback: StringCallback = (err: Error) => {
         expect(err).toBeInstanceOf(TypeError);
         expect(err).toMatchSnapshot();
@@ -34,7 +34,7 @@ describe('promisifyContrivedExample', () => {
       };
 
       // @ts-ignore bad input on purpose
-      getMsgAfterRandomSecsWithCallback(num1, num2, theCallback);
+      getMsgAfterRandomSecsWithCallback(badInput, num2, theCallback);
       expect(setTimeout).toHaveBeenCalledTimes(1);
       expect(setTimeout).toHaveBeenCalledWith(
         expect.any(Function),
@@ -46,8 +46,6 @@ describe('promisifyContrivedExample', () => {
 
   describe('async/await pattern', () => {
     it('gets a message after a random number of seconds using the promisified function', async () => {
-      const num1 = 1;
-      const num2 = 3;
       const msg = await getMsgAfterRandomSecsAsync(num1, num2);
 
       expect(msg).toMatch(/waited for \d seconds/);
@@ -55,21 +53,16 @@ describe('promisifyContrivedExample', () => {
       expect.assertions(2);
     });
 
-    it('gets an error after 0 seconds when one of the args is not \
-a number using the promisified function', async () => {
-      const num1 = 'a';
-      const num2 = 3;
+    it('gets an error when one of the args is not a number using the promisified function', async () => {
       // @ts-ignore bad input on purpose
-      const handledError = await getMsgAfterRandomSecsAsync(num1, num2);
+      await expect(getMsgAfterRandomSecsAsync(badInput, num2)).rejects.toThrowError(TypeError);
 
-      expect(handledError).toMatch('TypeError');
-      expect(handledError).toMatchSnapshot();
       expect(setTimeout).toHaveBeenCalledTimes(1);
       expect(setTimeout).toHaveBeenCalledWith(
         expect.any(Function),
         0,
       );
-      expect.assertions(4);
+      expect.assertions(3);
     });
   });
 });
