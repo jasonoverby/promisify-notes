@@ -25,7 +25,7 @@ const getMsgAfterRandomSecsWithCallback = (num1: number, num2: number, callback:
 
 const getMsgAfterRandomSecsAsync = async (num1: number, num2: number) => {
   const funcWithoutCallback = promisify(getMsgAfterRandomSecsWithCallback);
-  return funcWithoutCallback(num1, num2)
+  return funcWithoutCallback(num1, num2);
 };
 
 export {

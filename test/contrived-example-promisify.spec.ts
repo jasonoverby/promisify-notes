@@ -26,7 +26,7 @@ describe('promisifyContrivedExample', () => {
       expect.assertions(2);
     });
 
-    it('gets an error after 0 seconds when one of the args is not a number using a callback', (done) => {
+    it('gets an error when one of the args is not a number using a callback', (done) => {
       const theCallback: StringCallback = (err: Error) => {
         expect(err).toBeInstanceOf(TypeError);
         expect(err).toMatchSnapshot();
@@ -53,7 +53,7 @@ describe('promisifyContrivedExample', () => {
       expect.assertions(2);
     });
 
-    it('gets an error when one of the args is not a number using the promisified function', async () => {
+    it('throws an error when one of the args is not a number using the promisified function', async () => {
       // @ts-ignore bad input on purpose
       await expect(getMsgAfterRandomSecsAsync(badInput, num2)).rejects.toThrowError(TypeError);
 
