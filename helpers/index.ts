@@ -4,9 +4,6 @@ const notANumber = (num: any): boolean => typeof num !== 'number' || Number.isNa
 const getWaitedSecsMsg = (num: number): string => `waited for ${num} seconds`;
 const getNotANumberMsg = (num1: number, num2: number): string => (
   `"One or both of these arguments is not a number: ${num1}, ${num2}`);
-const getImprovedErrorMsg = (err: Error): string => (
-  chalk.red(err.stack.toString().split('\n').slice(0, 2).join('\n'))
-);
 
 const getRandomIntBetweenMinAndMax = (num1: number, num2: number): number => {
   // ensures non-negative integers
@@ -16,7 +13,6 @@ const getRandomIntBetweenMinAndMax = (num1: number, num2: number): number => {
 };
 
 export {
-  getImprovedErrorMsg,
   getNotANumberMsg,
   getRandomIntBetweenMinAndMax,
   getWaitedSecsMsg,
