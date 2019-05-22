@@ -8,6 +8,7 @@ describe('promisifyContrivedExample', () => {
   const num1 = 1;
   const num2 = 3;
   const badInput = 'a';
+  const patt = new RegExp(/waited for \d second\(s\)/);
 
   beforeEach(() => {
     jest.restoreAllMocks();
@@ -17,7 +18,7 @@ describe('promisifyContrivedExample', () => {
   describe('callback pattern', () => {
     it('gets a message after a random number of seconds inside a callback', (done) => {
       const theCallback: StringCallback = (_: Error, msg: string) => {
-        expect(msg).toMatch(/waited for \d seconds/);
+        expect(msg).toMatch(patt);
         done();
       };
 
@@ -48,7 +49,7 @@ describe('promisifyContrivedExample', () => {
     it('gets a message after a random number of seconds using the promisified function', async () => {
       const msg = await getMsgAfterRandomSecsAsync(num1, num2);
 
-      expect(msg).toMatch(/waited for \d seconds/);
+      expect(msg).toMatch(patt);
       expect(setTimeout).toHaveBeenCalledTimes(1);
       expect.assertions(2);
     });

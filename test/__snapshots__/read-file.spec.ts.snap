@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`readFile readFileAsync gets an error if there is no file at that file path 1`] = `"ENOENT: no such file or directory, open '/Users/j0o00um/p/practice/promisify/test/nonexistent-file.txt'"`;

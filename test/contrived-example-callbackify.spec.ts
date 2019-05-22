@@ -4,10 +4,11 @@ describe('callbackify getMsgAfterRandomSecsAsync', () => {
   const num1 = 1;
   const num2 = 4;
   const badInput = 'a';
+  const patt = new RegExp(/waited for \d second\(s\)/);
 
   it('takes a callback that will log a message', (done) => {
     getMsgAfterRandomSecsCallback(num1, num2, (err: Error, msg: string) => {
-      expect(msg).toMatch(/waited for \d seconds/);
+      expect(msg).toMatch(patt);
       done();
     });
 

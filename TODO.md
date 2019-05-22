@@ -1,7 +1,7 @@
 # TODO
 
+* sync vs promisified methods - blocking
 * build presentation
-  
   * callback hell
   * promises simplify
   * what about existing functions that take callbacks?

@@ -1,65 +1,45 @@
+import { getFancyString } from '../helpers';
 import {
   myFuncAsync,
   myFuncAsyncThatWillNotRun,
   myFuncWithCallback,
 } from '../lib/promisify-custom';
 
+const patt = new RegExp(/waited for \d second\(s\) for something fancy/);
 describe('promisify-custom', () => {
-  describe('error-last callback pattern', () => {
-    it('succeeds when something is "something"', (done) => {
-      const something = 'something';
+  describe('no error callback pattern', () => {
+    it('returns string to the callback to do further processing', (done) => {
+      const str = 'something';
       const theCallback = (result: string) => {
-        expect(result).toBe('something');
+        const fancyResult = getFancyString(result);
+        expect(fancyResult).toMatch(patt);
         done();
       };
 
-      myFuncWithCallback(something, theCallback);
+      myFuncWithCallback(str, theCallback);
       expect.assertions(1);
-    });
-
-    it('fails when something is not "something"', (done) => {
-      const something = '';
-      const theCallback = (result: string, err: Error) => {
-        expect(result).toBe(null);
-        expect(err).toBeInstanceOf(TypeError);
-        done();
-      };
-
-      myFuncWithCallback(something, theCallback);
-      expect.assertions(2);
     });
   });
 
-  describe('standard promisify with error-last callback', () => {
-    it('fails when something is "something"', async () => {
-      const something = 'something';
+  describe('standard promisify with no error callback', () => {
+    it('fails', async () => {
+      const str = 'something';
       try {
-        await myFuncAsyncThatWillNotRun(something);
+        await myFuncAsyncThatWillNotRun(str);
       } catch (err) {
-        expect(err).toBe('something');
+        const fancyError = getFancyString(err);
+        expect(fancyError).toMatch(patt);
       }
       expect.assertions(1);
     });
-
-    it('returns TypeError when something is not "something"', async () => {
-      const something = '';
-      const result = await myFuncAsyncThatWillNotRun(something);
-      expect(result).toBeInstanceOf(TypeError);
-      expect.assertions(1);
-    });
   });
 
-  describe('custom promisify with error-last callback', () => {
-    it('returns "something" when something is not "something"', async () => {
-      const something = 'something';
-      const result = await myFuncAsync(something);
-      expect(result).toBe('something async');
-      expect.assertions(1);
-    });
-
-    it('fails when something is not "something"', async () => {
-      const something = '';
-      await expect(myFuncAsync(something)).rejects.toBeInstanceOf(TypeError);
+  describe('custom promisify with no error callback', () => {
+    it('returns matching result', async () => {
+      const str = 'something';
+      const result = await myFuncAsync(str);
+      const fancyResult = getFancyString(result);
+      expect(fancyResult).toMatch(patt);
       expect.assertions(1);
     });
   });

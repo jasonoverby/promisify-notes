@@ -1,26 +1,24 @@
 import { promisify } from 'util';
+import { getRandomIntBetweenMinAndMax, getWaitedSecsMsg } from '../helpers';
 
-const getSomethingErr = (something: string) => new TypeError(`"${something}" is not something`);
-export type ErrorLastStringCallback = (str?: string, err?: Error) => void;
-
-const myFuncWithCallback = (something: string, callback: ErrorLastStringCallback): void => {
-  if (something !== 'something') {
-    callback(null, getSomethingErr(something));
-  } else {
-    callback(something, null);
-  }
+const getMsg = (waitTime: number, str: string) => `${getWaitedSecsMsg(waitTime)} for ${str}`;
+export type NoErrorStringCallback = (str: string) => void;
+const myFuncWithCallback = (str: string, callback: NoErrorStringCallback): void => {
+  const waitTime = getRandomIntBetweenMinAndMax(1, 4);
+  setTimeout(() => {
+    callback(getMsg(waitTime, str));
+  }, waitTime);
 };
 
 type AsyncFuncType = (url: string, cb?: (resolve: string) => void) => Promise<string>;
 const myFuncAsyncThatWillNotRun: AsyncFuncType = promisify(myFuncWithCallback);
 
-myFuncWithCallback[promisify.custom] = (something: string): Promise<string> => (
-  new Promise((resolve, reject) => {
-    if (something !== 'something') {
-      reject(getSomethingErr(something));
-    } else {
-      resolve(`${something} async`);
-    }
+myFuncWithCallback[promisify.custom] = (str: string): Promise<string> => (
+  new Promise((resolve) => {
+    const waitTime = getRandomIntBetweenMinAndMax(1, 4);
+    setTimeout(() => {
+      resolve(getMsg(waitTime, str));
+    }, waitTime);
   })
 );
 

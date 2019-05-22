@@ -1,6 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { get } from 'https';
-import { getHttps, HttpsGetCb } from '../lib/get-https';
+import { promisify } from 'util';
+import { getHttps, GetHttpsType, HttpsGetCb } from '../lib/get-https';
 
 describe('https.get', () => {
   const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
@@ -38,6 +39,12 @@ describe('https.get', () => {
         get(`${badTodosUrl}/${todoId}`, callback);
       }).toThrowErrorMatchingSnapshot();
       expect.assertions(1);
+    });
+
+    it('promisifies', async () => {
+      const promisifiedGet: GetHttpsType = promisify(get);
+      const todo = await promisifiedGet(`${todosUrl}/${todoId}`);
+      expect(todo).toMatchSnapshot(snapshotMatcher);
     });
   });
 

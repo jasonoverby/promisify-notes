@@ -25,5 +25,6 @@ const getHttps: GetHttpsType = promisify(get);
 
 export {
   getHttps,
+  GetHttpsType,
   HttpsGetCb,
 };

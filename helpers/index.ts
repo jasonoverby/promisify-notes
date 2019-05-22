@@ -1,9 +1,10 @@
 import chalk from 'chalk';
 
 const notANumber = (num: any): boolean => typeof num !== 'number' || Number.isNaN(num);
-const getWaitedSecsMsg = (num: number): string => `waited for ${num} seconds`;
+const getWaitedSecsMsg = (num: number): string => `waited for ${num} second(s)`;
 const getNotANumberMsg = (num1: number, num2: number): string => (
   `"One or both of these arguments is not a number: ${num1}, ${num2}`);
+const getFancyString = (str: string) => chalk.magenta(`${str} fancy`);
 
 const getRandomIntBetweenMinAndMax = (num1: number, num2: number): number => {
   // ensures non-negative integers
@@ -13,6 +14,7 @@ const getRandomIntBetweenMinAndMax = (num1: number, num2: number): number => {
 };
 
 export {
+  getFancyString,
   getNotANumberMsg,
   getRandomIntBetweenMinAndMax,
   getWaitedSecsMsg,
