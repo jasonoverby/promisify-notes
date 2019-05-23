@@ -1,14 +1,16 @@
+import { callbackify, promisify } from 'util';
 import {
-  getMsgAfterRandomSecsAsync,
   getMsgAfterRandomSecsWithCallback,
   StringCallback,
-} from '../lib/contrived-example-promisify';
+} from '../lib/contrived-example';
 
 describe('promisifyContrivedExample', () => {
   const num1 = 1;
   const num2 = 3;
   const badInput = 'a';
   const patt = new RegExp(/waited for \d second\(s\)/);
+  const getMsgAfterRandomSecsAsync = promisify(getMsgAfterRandomSecsWithCallback);
+  const getMsgAfterRandomSecsCallbackified = callbackify(getMsgAfterRandomSecsAsync);
 
   beforeEach(() => {
     jest.restoreAllMocks();
@@ -64,6 +66,34 @@ describe('promisifyContrivedExample', () => {
         0,
       );
       expect.assertions(3);
+    });
+  });
+
+  describe('callbackify', () => {
+    it('takes a callback that will log a message', (done) => {
+      getMsgAfterRandomSecsCallbackified(num1, num2, (err: Error, msg: string) => {
+        expect(msg).toMatch(patt);
+        done();
+      });
+
+      expect.assertions(1);
+    });
+
+    it('errors if something is wrong', (done) => {
+      jest.spyOn(global, 'setTimeout');
+      // @ts-ignore - bad input on purpose
+      getMsgAfterRandomSecsCallbackified(badInput, num2, (err: Error, msg: string) => {
+        expect(err).toBeInstanceOf(TypeError);
+        expect(err).toMatchSnapshot();
+        expect(setTimeout).toHaveBeenCalledTimes(1);
+        expect(setTimeout).toHaveBeenCalledWith(
+          expect.any(Function),
+          0,
+        );
+        done();
+      });
+
+      expect.assertions(4);
     });
   });
 });

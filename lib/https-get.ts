@@ -6,10 +6,10 @@ import {
 import { promisify } from 'util';
 
 type HttpsGetCb = (response: IncomingMessage) => void;
-type GetHttpsType = (url: string, options?: RequestOptions, cb?: HttpsGetCb) => Promise<{}>;
-get[promisify.custom] = (url: string): Promise<{}> => (
+type HttpsGetType = (url: string | URL, options?: RequestOptions, callback?: HttpsGetCb) => {};
+get[promisify.custom] = (url: string, options: RequestOptions = {}): Promise<{}> => (
   new Promise((resolve, reject) => {
-    get(url, (response: IncomingMessage) => {
+    const callback: HttpsGetCb = (response: IncomingMessage) => {
       let str = '';
       response.on('data', (data: ServerResponse) => {
         str += data;
@@ -17,14 +17,13 @@ get[promisify.custom] = (url: string): Promise<{}> => (
       response.on('end', () => {
         resolve(JSON.parse(str));
       });
-    }).on('error', reject);
+    };
+    get(url, options, callback).on('error', reject);
   })
 );
 
-const getHttps: GetHttpsType = promisify(get);
-
 export {
-  getHttps,
-  GetHttpsType,
+  get,
+  HttpsGetType,
   HttpsGetCb,
 };

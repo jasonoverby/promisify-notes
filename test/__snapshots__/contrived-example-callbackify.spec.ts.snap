@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`callbackify getMsgAfterRandomSecsAsync errors if something is wrong 1`] = `[TypeError: "One or both of these arguments is not a number: a, 4]`;

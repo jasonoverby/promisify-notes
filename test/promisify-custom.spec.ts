@@ -1,7 +1,7 @@
+import { promisify } from 'util';
 import { getFancyString } from '../helpers';
 import {
-  myFuncAsync,
-  myFuncAsyncThatWillNotRun,
+  AsyncFuncType,
   myFuncWithCallback,
 } from '../lib/promisify-custom';
 
@@ -16,27 +16,16 @@ describe('promisify-custom', () => {
         done();
       };
 
-      myFuncWithCallback(str, theCallback);
-      expect.assertions(1);
-    });
-  });
-
-  describe('standard promisify with no error callback', () => {
-    it('fails', async () => {
-      const str = 'something';
-      try {
-        await myFuncAsyncThatWillNotRun(str);
-      } catch (err) {
-        const fancyError = getFancyString(err);
-        expect(fancyError).toMatch(patt);
-      }
+      myFuncWithCallback(theCallback, str);
       expect.assertions(1);
     });
   });
 
   describe('custom promisify with no error callback', () => {
     it('returns matching result', async () => {
+      const myFuncAsync: AsyncFuncType = promisify(myFuncWithCallback);
       const str = 'something';
+      // @ts-ignore - typescript difficulty with custom promisified funcs
       const result = await myFuncAsync(str);
       const fancyResult = getFancyString(result);
       expect(fancyResult).toMatch(patt);

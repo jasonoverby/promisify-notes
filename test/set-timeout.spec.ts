@@ -7,7 +7,7 @@ describe('promisified setTimeout', () => {
     await wait(2000);
     const after = Date.now();
     const timeWaited = after - before;
-    expect(timeWaited).toBeGreaterThan(2000);
+    expect(timeWaited).toBeGreaterThanOrEqual(2000);
     expect(timeWaited).toBeLessThan(3000);
     expect.assertions(2);
   });

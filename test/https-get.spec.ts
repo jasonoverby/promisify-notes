@@ -1,9 +1,9 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { get } from 'https';
 import { promisify } from 'util';
-import { getHttps, GetHttpsType, HttpsGetCb } from '../lib/get-https';
+import { get, HttpsGetCb, HttpsGetType } from '../lib/https-get';
 
 describe('https.get', () => {
+  const promisifiedGet: HttpsGetType = promisify(get);
   const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
   const badTodosUrl = 'htps://jsonplaceholder.typicode.com/todos';
   const todoId = 2;
@@ -14,7 +14,7 @@ describe('https.get', () => {
     userId: expect.any(Number),
   };
 
-  describe('getting a todo with a callback', () => {
+  describe('callback https.get', () => {
     it('succeeds when url is valid', (done) => {
       const callback: HttpsGetCb = (response: IncomingMessage) => {
         let str = '';
@@ -28,7 +28,7 @@ describe('https.get', () => {
         });
       };
 
-      get(`${todosUrl}/${todoId}`, {}, callback);
+      get(`${todosUrl}/${todoId}`, callback);
       expect.assertions(1);
     });
 
@@ -40,41 +40,18 @@ describe('https.get', () => {
       }).toThrowErrorMatchingSnapshot();
       expect.assertions(1);
     });
-
-    it('promisifies', async () => {
-      const promisifiedGet: GetHttpsType = promisify(get);
-      const todo = await promisifiedGet(`${todosUrl}/${todoId}`);
-      expect(todo).toMatchSnapshot(snapshotMatcher);
-    });
   });
 
-  describe('httpsGet', () => {
+  describe('promsified https.get', () => {
     it('succeeds when url is valid', async () => {
-      const todo = await getHttps(`${todosUrl}/${todoId}`);
+      const todo = await promisifiedGet(`${todosUrl}/${todoId}`);
       expect(todo).toMatchSnapshot(snapshotMatcher);
       expect.assertions(1);
     });
 
-    it('fails when url is valid', async () => {
-      await expect(getHttps(`${badTodosUrl}/${todoId}`)).rejects.toThrowErrorMatchingSnapshot();
+    it('fails when url is invalid', async () => {
+      await expect(promisifiedGet(`${badTodosUrl}/${todoId}`)).rejects.toThrowErrorMatchingSnapshot();
       expect.assertions(1);
-    });
-
-    describe('getting a todo with getHttps', () => {
-      const getTodo = (id: number) => getHttps(`${todosUrl}/${id}`);
-
-      it('succeeds when the todo is found', async () => {
-        const todo = await getTodo(todoId);
-        expect(todo).toMatchSnapshot(snapshotMatcher);
-        expect.assertions(1);
-      });
-
-      it('receives empty object when the todo is not found', async () => {
-        const nonexistentTodo = await getTodo(1000);
-        expect(JSON.stringify(nonexistentTodo)).toMatch('{}');
-        expect(nonexistentTodo).not.toHaveProperty('id');
-        expect.assertions(2);
-      });
     });
   });
 });

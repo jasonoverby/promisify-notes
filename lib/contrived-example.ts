@@ -1,5 +1,3 @@
-import chalk from 'chalk';
-import { promisify } from 'util';
 import {
   getNotANumberMsg,
   getRandomIntBetweenMinAndMax,
@@ -23,13 +21,7 @@ const getMsgAfterRandomSecsWithCallback = (num1: number, num2: number, callback:
   }, randomWaitFrom1ToNumSecs);
 };
 
-const getMsgAfterRandomSecsAsync = async (num1: number, num2: number) => {
-  const funcWithoutCallback = promisify(getMsgAfterRandomSecsWithCallback);
-  return funcWithoutCallback(num1, num2);
-};
-
 export {
-  getMsgAfterRandomSecsAsync,
   getMsgAfterRandomSecsWithCallback,
   StringCallback,
 };
