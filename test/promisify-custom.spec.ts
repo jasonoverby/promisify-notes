@@ -22,7 +22,7 @@ describe('promisify-custom', () => {
 
   describe('custom promisify with no error callback', () => {
     it('returns matching result', async () => {
-      const myFuncAsync = promisify<(callback: NoErrorStringCallback, str: string) => void>(myFuncWithCallback);
+      const myFuncAsync = promisify(myFuncWithCallback);
       const str = 'something';
       // @ts-ignore - typescript difficulty with custom promisified funcs
       const result = await myFuncAsync(str);
