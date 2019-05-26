@@ -10,8 +10,6 @@ const myFuncWithCallback = (callback: NoErrorStringCallback, str: string): void 
   }, waitTime);
 };
 
-type AsyncFuncType = (cb: (resolve: string) => void, str: string) => Promise<string>;
-
 myFuncWithCallback[promisify.custom] = (str: string): Promise<string> => (
   new Promise((resolve) => {
     const waitTime = getRandomIntBetweenMinAndMax(1, 4);
@@ -22,6 +20,5 @@ myFuncWithCallback[promisify.custom] = (str: string): Promise<string> => (
 );
 
 export {
-  AsyncFuncType,
   myFuncWithCallback,
 };
