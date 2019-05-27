@@ -1,4 +1,4 @@
-# util.promisify notes
+# `util.promisify` notes
 Notes and code for a presentation on `util.promisify`
 
 ## Versions
