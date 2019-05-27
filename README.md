@@ -6,9 +6,8 @@ Notes and code for a presentation on `util.promisify`
 * npm: `6.9.0`
 
 ## Examples
+### Standard Node-style-callback-based function
 ``` js
-/** example with a standard Node-style-callback-based function */
-
 /** import/require promisify from the util core Node module */
 import { promisify } from 'util';
 import { readFile } from 'fs';
@@ -20,11 +19,8 @@ import { readFile } from 'fs';
 const readFileAsync1 = promisify(fs.readFile);
 ```
 
+### Function that does not conform to the Node-style-callback standard
 ```js
-/** 
- * example with a function that does not conform
- * to the Node-style-callback-based standard
- */
 const nonStandardFunc = (str, callback) => {
   const waitTime = getNumBetween(1, 4);
   setTimeout(() => {
