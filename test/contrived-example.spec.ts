@@ -1,16 +1,15 @@
-import { callbackify, promisify } from 'util';
+import { promisify } from 'util';
+import { patt } from '../helpers';
 import {
   getMsgAfterRandomSecsWithCallback,
-  StringCallback,
+  NodeStyleCallback,
 } from '../lib/contrived-example';
 
 describe('promisifyContrivedExample', () => {
   const num1 = 1;
   const num2 = 3;
   const badInput = 'a';
-  const patt = new RegExp(/waited for \d second\(s\)/);
   const getMsgAfterRandomSecsAsync = promisify(getMsgAfterRandomSecsWithCallback);
-  const getMsgAfterRandomSecsCallbackified = callbackify(getMsgAfterRandomSecsAsync);
 
   beforeEach(() => {
     jest.restoreAllMocks();
@@ -19,8 +18,8 @@ describe('promisifyContrivedExample', () => {
 
   describe('callback pattern', () => {
     it('gets a message after a random number of seconds inside a callback', (done) => {
-      const theCallback: StringCallback = (_: Error, msg: string) => {
-        expect(msg).toMatch(patt);
+      const theCallback: NodeStyleCallback = (_: Error, fancyMsg: string) => {
+        expect(fancyMsg).toMatch(patt);
         done();
       };
 
@@ -30,7 +29,7 @@ describe('promisifyContrivedExample', () => {
     });
 
     it('gets an error when one of the args is not a number using a callback', (done) => {
-      const theCallback: StringCallback = (err: Error) => {
+      const theCallback: NodeStyleCallback = (err: Error) => {
         expect(err).toBeInstanceOf(TypeError);
         expect(err).toMatchSnapshot();
         done();
@@ -49,9 +48,9 @@ describe('promisifyContrivedExample', () => {
 
   describe('async/await pattern', () => {
     it('gets a message after a random number of seconds using the promisified function', async () => {
-      const msg = await getMsgAfterRandomSecsAsync(num1, num2);
+      const fancyMsg = await getMsgAfterRandomSecsAsync(num1, num2);
 
-      expect(msg).toMatch(patt);
+      expect(fancyMsg).toMatch(patt);
       expect(setTimeout).toHaveBeenCalledTimes(1);
       expect.assertions(2);
     });
@@ -66,34 +65,6 @@ describe('promisifyContrivedExample', () => {
         0,
       );
       expect.assertions(3);
-    });
-  });
-
-  describe('callbackify', () => {
-    it('takes a callback that will log a message', (done) => {
-      getMsgAfterRandomSecsCallbackified(num1, num2, (err: Error, msg: string) => {
-        expect(msg).toMatch(patt);
-        done();
-      });
-
-      expect.assertions(1);
-    });
-
-    it('errors if something is wrong', (done) => {
-      jest.spyOn(global, 'setTimeout');
-      // @ts-ignore - bad input on purpose
-      getMsgAfterRandomSecsCallbackified(badInput, num2, (err: Error, msg: string) => {
-        expect(err).toBeInstanceOf(TypeError);
-        expect(err).toMatchSnapshot();
-        expect(setTimeout).toHaveBeenCalledTimes(1);
-        expect(setTimeout).toHaveBeenCalledWith(
-          expect.any(Function),
-          0,
-        );
-        done();
-      });
-
-      expect.assertions(4);
     });
   });
 });

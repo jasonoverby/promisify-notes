@@ -1,21 +1,20 @@
 import { promisify } from 'util';
-import { getFancyString } from '../helpers';
+import { fancyPatt, getFancyString } from '../helpers';
 import {
-  myFuncWithCallback, NoErrorStringCallback,
+  myFuncWithCallback, NoErrorCallback,
 } from '../lib/promisify-custom';
 
-const patt = new RegExp(/waited for \d second\(s\) for something fancy/);
 describe('promisify-custom', () => {
   describe('no error callback pattern', () => {
     it('returns string to the callback to do further processing', (done) => {
       const str = 'something';
-      const theCallback = (result: string) => {
+      const theCallback: NoErrorCallback = (result: string) => {
         const fancyResult = getFancyString(result);
-        expect(fancyResult).toMatch(patt);
+        expect(fancyResult).toMatch(fancyPatt);
         done();
       };
 
-      myFuncWithCallback(theCallback, str);
+      myFuncWithCallback(str, theCallback);
       expect.assertions(1);
     });
   });
@@ -27,7 +26,7 @@ describe('promisify-custom', () => {
       // @ts-ignore - typescript difficulty with custom promisified funcs
       const result = await myFuncAsync(str);
       const fancyResult = getFancyString(result);
-      expect(fancyResult).toMatch(patt);
+      expect(fancyResult).toMatch(fancyPatt);
       expect.assertions(1);
     });
   });
