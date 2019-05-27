@@ -15,7 +15,7 @@ import { readFile } from 'fs';
 /**
  * pass in a Node-style-callback-based function
  * to get back a promise-based version of the function
-/*
+ */
 const readFileAsync1 = promisify(fs.readFile);
 ```
 
