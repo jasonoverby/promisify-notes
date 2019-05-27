@@ -5,7 +5,7 @@ import {
   notANumber,
 } from '../helpers';
 
-type NodeStyleCallback = (err?: Error, param?: any) => void;
+type NodeStyleCallback = (err?: Error | null, param?: any) => void;
 
 const getMsgAfterRandomSecsWithCallback = (num1: number, num2: number, callback: NodeStyleCallback): void => {
   /** will be NaN if either num1 or num2 is not a number */

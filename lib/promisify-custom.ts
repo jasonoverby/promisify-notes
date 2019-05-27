@@ -10,6 +10,7 @@ const myFuncWithCallback = (str: string, callback: NoErrorCallback): void => {
   }, waitTime);
 };
 
+// @ts-ignore - typescript difficulty with custom promisified funcs
 myFuncWithCallback[promisify.custom] = (str: string): Promise<string> => (
   new Promise((resolve) => {
     const waitTime = getRandomIntBetweenMinAndMax(1, 4);

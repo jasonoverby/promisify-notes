@@ -1,7 +1,17 @@
 {
   "strict": true,
-  "compileOnSave": true,
   "compilerOptions": {
+    "alwaysStrict": true,
+    "lib": ["es2017"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": false,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "outDir": "build",
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "target": "es2017"
   },
 }
