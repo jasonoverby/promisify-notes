@@ -7,10 +7,9 @@ Notes and code for a presentation on `util.promisify`
 
 ## Examples
 ``` js
-/**
- * example with standard Node-style-callback-based function
- * import/require promisify from the util core Node module
- */
+/** example with a standard Node-style-callback-based function */
+
+/** import/require promisify from the util core Node module */
 import { promisify } from 'util';
 import { readFile } from 'fs';
 
@@ -23,8 +22,8 @@ const readFileAsync1 = promisify(fs.readFile);
 
 ```js
 /** 
- * example with function that does not conform to the
- * Node-style-callback-based standard
+ * example with a function that does not conform
+ * to the Node-style-callback-based standard
  */
 const nonStandardFunc = (str, callback) => {
   const waitTime = getNumBetween(1, 4);
@@ -49,8 +48,8 @@ const nonStandardFuncAsync = promisify(nonStandardFunc);
 
 /** 
  * if the orginal function is exported, promisify
- * will return the custom function wherever it is called
- * on the original function
+ * will return the custom function wherever it is
+ * called on the original function
  */
  export { nonStandardFunc };
  
