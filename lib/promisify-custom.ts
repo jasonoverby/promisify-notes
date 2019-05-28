@@ -1,7 +1,7 @@
 import { promisify } from 'util';
 import { getMsgAfterWait, getRandomIntBetweenMinAndMax } from '../helpers';
 
-/** monkey-patch to get promisify.custom to play nice with TS */
+/** to get TS to play nice with promisify.custom */
 declare module 'util' {
   function promisify<T>(
     func: (param: T, cb: (data: T) => void,
