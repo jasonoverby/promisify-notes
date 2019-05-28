@@ -1,26 +1,39 @@
 import { promisify } from 'util';
-import { getRandomIntBetweenMinAndMax, getWaitedSecsMsg } from '../helpers';
+import { getMsgAfterWait, getRandomIntBetweenMinAndMax } from '../helpers';
 
-const getMsg = (waitTime: number, str: string) => `${getWaitedSecsMsg(waitTime)} for ${str}`;
+/** monkey-patch to get promisify.custom to play nice with TS */
+declare module 'util' {
+  function promisify<T>(
+    func: (param: T, cb: (data: T) => void,
+  ) => void): (param: T) => Promise<T>;
+}
 type NoErrorCallback = (param: any) => void;
-const myFuncWithCallback = (str: string, callback: NoErrorCallback): void => {
+type MyFuncAsync = (str: string) => Promise<string>;
+interface MyFuncWithCallback {
+    (str: string, callback: NoErrorCallback): void;
+    [promisify.custom]?: MyFuncAsync;
+}
+
+const myFuncWithCallback: MyFuncWithCallback = (str: string, callback: NoErrorCallback): void => {
   const waitTime = getRandomIntBetweenMinAndMax(1, 4);
   setTimeout(() => {
-    callback(getMsg(waitTime, str));
+    callback(getMsgAfterWait(waitTime, str));
   }, waitTime);
 };
 
-// @ts-ignore - typescript difficulty with custom promisified funcs
 myFuncWithCallback[promisify.custom] = (str: string): Promise<string> => (
-  new Promise((resolve) => {
+  new Promise<string>((resolve) => {
     const waitTime = getRandomIntBetweenMinAndMax(1, 4);
     setTimeout(() => {
-      resolve(getMsg(waitTime, str));
+      const msg: string = getMsgAfterWait(waitTime, str);
+      resolve(msg);
     }, waitTime);
   })
 );
 
 export {
   myFuncWithCallback,
+  MyFuncWithCallback,
+  MyFuncAsync,
   NoErrorCallback,
 };
