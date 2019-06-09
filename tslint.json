@@ -1,10 +1,18 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended"],
+  "extends": [
+    "tslint:recommended"
+  ],
   "rules": {
     "no-console": false,
-    "quotemark": [true, "single"],
-    "interface-name" : [true, "never-prefix"]
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "interface-name": [
+      true,
+      "never-prefix"
+    ]
   },
   "rulesDirectory": []
 }
