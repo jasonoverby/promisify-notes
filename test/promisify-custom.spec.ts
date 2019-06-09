@@ -1,7 +1,9 @@
 import { promisify } from 'util';
 import { fancyPatt, getFancyString } from '../helpers';
 import {
-  MyFuncAsync, myFuncWithCallback, NoErrorCallback,
+  MyFuncAsync,
+  myFuncWithCallback,
+  NoErrorCallback,
 } from '../lib/promisify-custom';
 
 describe('promisify-custom', () => {

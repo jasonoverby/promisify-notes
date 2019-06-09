@@ -9,7 +9,9 @@ describe('promisifyContrivedExample', () => {
   const num1 = 1;
   const num2 = 3;
   const badInput = 'a';
-  const getMsgAfterRandomSecsAsync = promisify(getMsgAfterRandomSecsWithCallback);
+  const getMsgAfterRandomSecsAsync = promisify(
+    getMsgAfterRandomSecsWithCallback,
+  );
 
   beforeEach(() => {
     jest.restoreAllMocks();
@@ -38,10 +40,7 @@ describe('promisifyContrivedExample', () => {
       // @ts-ignore bad input on purpose
       getMsgAfterRandomSecsWithCallback(badInput, num2, theCallback);
       expect(setTimeout).toHaveBeenCalledTimes(1);
-      expect(setTimeout).toHaveBeenCalledWith(
-        expect.any(Function),
-        0,
-      );
+      expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 0);
       expect.assertions(4);
     });
   });
@@ -56,14 +55,13 @@ describe('promisifyContrivedExample', () => {
     });
 
     it('throws an error when one of the args is not a number using the promisified function', async () => {
-      // @ts-ignore bad input on purpose
-      await expect(getMsgAfterRandomSecsAsync(badInput, num2)).rejects.toThrowError(TypeError);
+      await expect(
+        // @ts-ignore bad input on purpose
+        getMsgAfterRandomSecsAsync(badInput, num2),
+      ).rejects.toThrowError(TypeError);
 
       expect(setTimeout).toHaveBeenCalledTimes(1);
-      expect(setTimeout).toHaveBeenCalledWith(
-        expect.any(Function),
-        0,
-      );
+      expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 0);
       expect.assertions(3);
     });
   });
