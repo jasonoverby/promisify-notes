@@ -1,5 +1,5 @@
 import { promisify } from 'util';
-import { getMsgAfterWait, getRandomIntBetweenMinAndMax } from '../helpers';
+import { getMsgWithWaitTime, getRandomIntBetweenMinAndMax } from '../helpers';
 
 /** to get TS to play nice with promisify.custom */
 declare module 'util' {
@@ -20,7 +20,7 @@ const myFuncWithCallback: MyFuncWithCallback = (
 ): void => {
   const waitTime = getRandomIntBetweenMinAndMax(1, 4);
   setTimeout(() => {
-    callback(getMsgAfterWait(waitTime, str));
+    callback(getMsgWithWaitTime(waitTime, str));
   }, waitTime);
 };
 
@@ -28,7 +28,7 @@ myFuncWithCallback[promisify.custom] = (str: string): Promise<string> =>
   new Promise<string>((resolve) => {
     const waitTime = getRandomIntBetweenMinAndMax(1, 4);
     setTimeout(() => {
-      const msg: string = getMsgAfterWait(waitTime, str);
+      const msg: string = getMsgWithWaitTime(waitTime, str);
       resolve(msg);
     }, waitTime);
   });
