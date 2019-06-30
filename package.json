@@ -6,6 +6,10 @@
   "scripts": {
     "test": "tsc && jest"
   },
+  "engines": {
+    "node": ">=10.0.0",
+    "npm": ">=6.0.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
